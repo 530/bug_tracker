@@ -19,7 +19,8 @@ class HomePage extends Component {
   }
 
   render() {
-    const { users } = this.state;
+
+    const { users } = this.state.users;
 
     return (
       <div>

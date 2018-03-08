@@ -6,55 +6,45 @@ import SignOutButton from './SignOut';
 import * as routes from '../constants/routes';
 
 const Navigation = ({ authUser }) =>
-  <div>
-    { authUser
-        ? <NavigationAuth />
-        : <NavigationNonAuth />
-    }
-  </div>
+	<div>
+		{authUser
+			? <NavigationAuth />
+			: <NavigationNonAuth />
+		}
+	</div>
 
 const NavigationAuth = () =>
 	<div>
-  	<Navbar inverse fluid>
+		<Navbar inverse fluid>
 			<Navbar.Header>
-			<Navbar.Brand>
-				<a href="/"> Bug Tracker </a>
-			</Navbar.Brand>
+				<Navbar.Brand>
+					<a href="/"> Bug Tracker </a>
+				</Navbar.Brand>
 			</Navbar.Header>
 			<Nav pullRight>
-				<NavItem eventKey={1}>
-					<Link to={routes.LANDING}>Landing</Link>
-				</NavItem>
-				<NavItem eventKey={2}>
-    			<Link to={routes.HOME}>Home</Link>
-				</NavItem>
-				<NavItem eventKey={3}>
-    			<Link to={routes.ACCOUNT}>Account</Link>
-				</NavItem>
+				<NavItem eventKey={1} href={routes.LANDING}>Landing</NavItem>
+				<NavItem eventKey={2} href={routes.HOME}>Home</NavItem>
+				<NavItem eventKey={3} href={routes.ACCOUNT}>Account</NavItem>
 				<NavItem>
-    			<SignOutButton />
+					<SignOutButton />
 				</NavItem>
-				</Nav>
-  	</Navbar>
+			</Nav>
+		</Navbar>
 	</div>
 
 const NavigationNonAuth = () =>
 	<div>
-  	<Navbar inverse fluid>
+		<Navbar inverse fluid>
 			<Navbar.Header>
-			<Navbar.Brand>
-				<a href="/"> Bug Tracker </a>
-			</Navbar.Brand>
+				<Navbar.Brand>
+					<a href="/"> Bug Tracker </a>
+				</Navbar.Brand>
 			</Navbar.Header>
 			<Nav pullRight>
-				<NavItem eventKey={1}>
-					<Link to={routes.SIGN_UP}>Sign Up</Link>
-				</NavItem>
-				<NavItem eventKey={2}>
-    			<Link to={routes.SIGN_IN}>Sign In</Link>
-				</NavItem>
-				</Nav>
-  	</Navbar>
+				<NavItem eventKey={1} href={routes.SIGN_UP}>Sign Up</NavItem>
+				<NavItem eventKey={2} href={routes.SIGN_IN}>Sign In</NavItem>
+			</Nav>
+		</Navbar>
 	</div>
 
 

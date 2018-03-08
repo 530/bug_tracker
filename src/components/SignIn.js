@@ -86,7 +86,7 @@ class SignInForm extends Component {
           placeholder="Password"
         />
 				</FormGroup>
-        <Button block bsSize="Large" disabled={isInvalid} type="submit">
+        <Button block bsSize="large" disabled={isInvalid} type="submit">
           Log In
         </Button>
 
