@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Link } from 'react-router-dom';
-import { Navbar, Nav, NavItem, MenuItem, NavDropdown, Table } from 'react-bootstrap';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import SignOutButton from './SignOut';
 import * as routes from '../constants/routes';
 

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import logo from './Logo.png';
 import './App.css';
 
-import { Navbar, Nav, NavItem, MenuItem, NavDropdown, Table } from 'react-bootstrap';
 import LandingPage from './Landing';
 import SignUpPage from './SignUp';
 import SignInPage from './SignIn';
