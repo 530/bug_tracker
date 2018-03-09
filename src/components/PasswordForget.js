@@ -48,24 +48,24 @@ class PasswordForgetForm extends Component {
     const isInvalid = email === '';
 
     return (
-			<div className="Login">
-      <form onSubmit={this.onSubmit}>
-      	<FormGroup controlId="email" bsSize="large">
-				<ControlLabel>Email Address</ControlLabel>
-				<FormControl
-          value={this.state.email}
-          onChange={event => this.setState(byPropKey('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-				</FormGroup>
-        <Button bsSize="Large" disabled={isInvalid} type="submit">
-          Reset My Password
+      <div className="Login">
+        <form onSubmit={this.onSubmit}>
+          <FormGroup controlId="email" bsSize="large">
+            <ControlLabel>Email Address</ControlLabel>
+            <FormControl
+              value={this.state.email}
+              onChange={event => this.setState(byPropKey('email', event.target.value))}
+              type="text"
+              placeholder="Email Address"
+            />
+          </FormGroup>
+          <Button bsSize="large" disabled={isInvalid} type="submit">
+            Reset My Password
         </Button>
 
-        { error && <p>{error.message}</p> }
-      </form>
-			</div>
+          {error && <p>{error.message}</p>}
+        </form>
+      </div>
     );
   }
 }

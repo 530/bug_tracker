@@ -115,7 +115,7 @@ class SignUpForm extends Component {
           placeholder="Confirm Password"
         />
 				</FormGroup>
-        <Button bsSize="Large" disabled={isInvalid} type="submit">
+        <Button bsSize="large" disabled={isInvalid} type="submit">
           Sign Up
         </Button>
 
