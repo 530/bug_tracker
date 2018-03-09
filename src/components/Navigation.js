@@ -1,16 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './App.css';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import SignOutButton from './SignOut';
 import * as routes from '../constants/routes';
+import withAuthorization from './withAuthorization';
 
-const Navigation = ({ authUser }) =>
+const Navigation = (props, context) =>
 	<div>
-		{authUser
-			? <NavigationAuth />
-			: <NavigationNonAuth />
-		}
+		{context.authUser ? <NavigationAuth /> : <NavigationNonAuth />}
 	</div>
+
+Navigation.contextTypes = {
+	authUser: PropTypes.object,
+};
 
 const NavigationAuth = () =>
 	<div>
@@ -48,27 +51,3 @@ const NavigationNonAuth = () =>
 
 
 export default Navigation;
-
-/*
- <div className="App">
-				<Navbar>
-  				<Navbar.Header>
-    			<Navbar.Brand>
-      			<a href="/">Bug Tracker</a>
-    			</Navbar.Brand>
-  				</Navbar.Header>
-  				<Nav>
-    			<NavDropdown eventKey={3} title="More" id="basic-nav-dropdown">
-      			<MenuItem eventKey={3.1}>Report Bug</MenuItem>
-      			<MenuItem eventKey={3.2}>View Bugs</MenuItem>
-      			<MenuItem eventKey={3.3}>Contact</MenuItem>
-      			<MenuItem divider />
-      			<MenuItem eventKey={3.4}>Separated link</MenuItem>
-    			</NavDropdown>
-    			<NavItem eventKey={1} href="#">Login</NavItem>
-  				</Nav>
-				</Navbar>
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-        </header>
-*/
