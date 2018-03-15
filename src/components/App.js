@@ -26,7 +26,7 @@ class App extends Component {
 
   componentDidMount() {
     firebase.auth.onAuthStateChanged(authUser => {
-      this.setState({authUser: (authUser ? authUser : null)});
+      this.setState({ authUser: (authUser ? authUser : null) });
     });
   }
 
@@ -42,7 +42,7 @@ class App extends Component {
         <div>
           <header>
             <Navigation />
-            <hr />
+
             <Route
               exact path={routes.LANDING}
               component={() => <LandingPage />}

@@ -1,31 +1,44 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import { db } from '../firebase';
 import { PasswordForgetForm } from './PasswordForget';
 import PasswordChangeForm from './PasswordChange';
 import withAuthorization from './withAuthorization';
 
 class AccountPage extends Component {
 
-  constructor(props, context) {
+  constructor(props) {
     super(props);
+    this.state = {
+      users: null,
+    };
   }
 
+  componentDidMount() {
+    db.onceGetUsers().then(snapshot =>
+      this.setState(() => ({ users: snapshot.val() }))
+    );
+  }
+	
   render() {
-
+		const users = this.state.users;
+		
     return (
-      <div>
-        <h1>Account: {this.context.authUser.email}</h1>
+      <div className="App">
+        { !!users && <UserList users={ users } /> }
         <PasswordForgetForm />
         <PasswordChangeForm />
       </div>
     );
   }
-
+	
 }
 
-AccountPage.contextTypes = {
-  authUser: PropTypes.object,
-};
+const UserList = ({ users }) =>
+  <div>
+    {Object.keys(users).map(key =>
+      <div key={key}> <strong>Username:</strong> {users[key].username} <strong>Email:</strong> {users[key].email}</div>
+    )}
+  </div>
 
 export default withAuthorization()(AccountPage);

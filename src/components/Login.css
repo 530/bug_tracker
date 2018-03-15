@@ -9,3 +9,6 @@
   }
 }
 
+.navbar.navbar-default {
+  border-bottom: 0;
+}

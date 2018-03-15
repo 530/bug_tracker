@@ -32,3 +32,11 @@
 input {
 	text-align: center;
 }
+
+.navbar {
+  min-height: 40px !important;
+}
+
+.navitem {
+	color: red !important;
+}
