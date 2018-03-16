@@ -3,7 +3,6 @@ import './App.css';
 
 import { firebase } from '../firebase';
 import PropTypes from 'prop-types';
-
 import LandingPage from './Landing';
 import SignUpPage from './SignUp';
 import SignInPage from './SignIn';
