@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { PageHeader, Jumbotron } from 'react-bootstrap';
+import { PageHeader } from 'react-bootstrap';
 import './Landing.css';
+import icon from './Logo.png';
 
 const styledUp = {
 	borderBottom: 'none',
@@ -10,8 +11,8 @@ const styledUp = {
 class LandingPage extends Component {
 	render() {
   	return (
-			<div className="App">
-    		<PageHeader style={styledUp}>Welcome to Bug Tracker</PageHeader>
+			<div className="App App-intro">
+				<img src={icon} />
 				<Header/>
 				<Content/>
 			</div>
@@ -21,13 +22,19 @@ class LandingPage extends Component {
 
 const Header = () =>
   <div>
-		<h5>An efficient issue tracking tool</h5>
+		<h2>An efficient issue tracking tool</h2>
   </div>
 
 const Content = () =>
-	<div className="padding-header">
-		<h2>Features</h2>
-		<p>Paragraph</p>
+	<div className="element container">
+		<div classname="featurePad">
+			<h1><strong>Features</strong></h1>
+			<h4>Email Alerts</h4>
+			<h4>Easy to use GUI</h4>
+			<h4>Add/Complete tasks</h4>
+			<h4>Assigning Bugs and Issues fast and efficiently</h4>
+
+		</div>
 	</div>
 
 export default LandingPage;

@@ -23,16 +23,17 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser => {
-      this.setState({ authUser: (authUser ? authUser : null) });
-    });
-  }
-
   getChildContext() {
     return {
       authUser: this.state.authUser,
     };
+  }
+	
+	
+  componentDidMount() {
+    firebase.auth.onAuthStateChanged(authUser => {
+      this.setState({ authUser: (authUser ? authUser : null) });
+    });
   }
 
   render() {
