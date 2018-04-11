@@ -17,6 +17,7 @@ class HomePage extends Component {
 		this.descBug = this.descBug.bind(this)
 		this.submitBug = this.submitBug.bind(this)
 		this.removeBug = this.removeBug.bind(this)
+        this.updateBug = this.updateBug.bind(this)
 		this.state = {
 			station: '',
 			bug: '',
@@ -61,13 +62,24 @@ class HomePage extends Component {
 			bug: this.state.bug,
 			desc: this.state.desc,
 		}
-		firebase.database().ref('bugs/'+nextBug.id).set(nextBug)
+		firebase.database().ref('bugs/'+nextBug.id).set(nextBug);
 	}
 	
 	removeBug(event) {
-		const test = this.state.station;
-		firebase.database().ref('bugs/').child(test).remove();
+		const idNum = this.state.station;
+		firebase.database().ref('bugs/').child(idNum).remove();
 	}
+  
+    updateBug(event) {
+        const idNum = this.state.station;
+        const descUpdate = this.state.desc;
+      
+        var updates = {};
+        updates['/id'] = idNum;
+        updates['/desc'] = descUpdate;
+      
+        firebase.database().ref('bugs/').child(idNum).update(updates);
+    }
 	
   render() {
 		
@@ -80,10 +92,10 @@ class HomePage extends Component {
 				pagination={ true }
 				search={ true }>
 			  <TableHeaderColumn dataField='id' isKey={true} hidden={true}>Ref ID</TableHeaderColumn>
-        <TableHeaderColumn dataField='station' width="10" dataSort={true}>Station</TableHeaderColumn>
-        <TableHeaderColumn dataField='bug' width="25">Bug/Issue</TableHeaderColumn>
-				<TableHeaderColumn dataField='desc' width="50">Description</TableHeaderColumn>
-      </BootstrapTable>
+              <TableHeaderColumn dataField='station' width="10" dataSort={true}>Station</TableHeaderColumn>
+              <TableHeaderColumn dataField='bug' width="25">Bug/Issue</TableHeaderColumn>
+		      <TableHeaderColumn dataField='desc' width="50">Description</TableHeaderColumn>
+            </BootstrapTable>
 			
 			<input onChange={this.stationBug} type="text" placeholder="Station #" />
 			<br />
@@ -93,6 +105,7 @@ class HomePage extends Component {
 			<br />
 			<Button bsSize="large" onClick={this.submitBug} type="submit"> Enter Bug </Button>
 			<Button bsSize="large" onClick={this.removeBug} type="submit"> Remove Bug </Button>
+            <Button bsSize="large" onClick={this.updateBug} type="submit"> Update Bug </Button>
 			</div>
     );
   }
