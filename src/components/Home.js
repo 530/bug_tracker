@@ -64,8 +64,9 @@ class HomePage extends Component {
 		firebase.database().ref('bugs/'+nextBug.id).set(nextBug)
 	}
 	
-	removeBug() {
-		firebase.database().ref('bugs/').child().remove();
+	removeBug(event) {
+		const test = this.state.station;
+		firebase.database().ref('bugs/').child(test).remove();
 	}
 	
   render() {
@@ -73,16 +74,15 @@ class HomePage extends Component {
     return (
       <div className="App">
 			<Header />
-			
 			<BootstrapTable
 				ref='table'
 				data={ this.state.bugs }
 				pagination={ true }
-				search={ true } insertRow>
-			  <TableHeaderColumn dataField='id' isKey={true} dataSort={true}>Ref ID</TableHeaderColumn>
-        <TableHeaderColumn dataField='station' dataSort={true}>Station</TableHeaderColumn>
-        <TableHeaderColumn dataField='bug'>Bug/Issue</TableHeaderColumn>
-				<TableHeaderColumn dataField='desc'>Description</TableHeaderColumn>
+				search={ true }>
+			  <TableHeaderColumn dataField='id' isKey={true} hidden={true}>Ref ID</TableHeaderColumn>
+        <TableHeaderColumn dataField='station' width="10" dataSort={true}>Station</TableHeaderColumn>
+        <TableHeaderColumn dataField='bug' width="25">Bug/Issue</TableHeaderColumn>
+				<TableHeaderColumn dataField='desc' width="50">Description</TableHeaderColumn>
       </BootstrapTable>
 			
 			<input onChange={this.stationBug} type="text" placeholder="Station #" />
@@ -99,11 +99,3 @@ class HomePage extends Component {
 }
 
 export default withAuthorization()(HomePage);
-	
-				/*{
-    			this.state.bugs.map((bug, i) => {
-						return (
-							<li key={bug.id}> {bug.station} {bug.bug} {bug.desc}</li>
-						)
-					})			
-				}*/
