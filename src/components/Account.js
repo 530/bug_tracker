@@ -52,4 +52,5 @@ class AccountPage extends Component {
 	
 }
 
-export default withAuthorization()(AccountPage);
+//export default withAuthorization()(AccountPage);
+export default AccountPage;

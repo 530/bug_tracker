@@ -111,4 +111,7 @@ class HomePage extends Component {
   }
 }
 
-export default withAuthorization()(HomePage);
+const authCondition = (authUser) => !!authUser;
+
+//export default withAuthorization(authCondition)(HomePage);
+export default HomePage;
