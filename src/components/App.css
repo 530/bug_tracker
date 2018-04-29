@@ -98,3 +98,27 @@ textarea:focus {
   }
 }
 
+.bugTable {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    margin-left: auto;
+		margin-right: auto;
+		width: 80%;
+}
+
+.bugTable td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.bugTable tr:nth-child(even){background-color: #f2f2f2;}
+
+.bugTable tr:hover {background-color: #ddd;}
+
+.bugTable th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #1DA3FF;
+    color: white;
+}

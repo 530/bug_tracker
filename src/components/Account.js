@@ -1,20 +1,28 @@
 import React, { Component } from 'react';
-import { firebase } from '../firebase';
+import * as firebase from 'firebase';
 import { PasswordForgetForm } from './PasswordForget';
 import PasswordChangeForm from './PasswordChange';
 import withAuthorization from './withAuthorization';
 
 class AccountPage extends Component {
-
-  constructor(props) {
-    super(props);
+	
+  constructor(props,context) {
+    super(props,context);
     this.state = {
       authUser: null,
-			value: 'coconut'
+			value: 'coconut',
+			bugs: null
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+	
+	componentDidMount() {
+		firebase.database().ref('bugs/').on('value', (snapshot) => {
+				this.setState({ bugs: snapshot.val() })
+		})
+	}
+	
 
   handleChange(event) {
     this.setState({value: event.target.value});
@@ -25,10 +33,14 @@ class AccountPage extends Component {
     event.preventDefault();
   }
   render() {
-		
+		const { bugs } = this.state;
     return (
       <div className="App">
-	
+			
+			{ !!bugs && <BugList bugs={bugs} /> }
+			
+			<BugTable />
+			
       <form onSubmit={this.handleSubmit}>
         <label>
           Pick your favorite La Croix flavor:
@@ -51,6 +63,23 @@ class AccountPage extends Component {
   }
 	
 }
+
+const BugTable = () =>
+	<table className="bugTable">
+		<tr>
+			<th> Station </th>
+			<th> Bug </th>
+			<th> Desc </th>
+			<th> Priority </th>
+		</tr>
+	</table>
+
+const BugList = ({ bugs }) =>
+	<div>
+			{Object.keys(bugs).map(key =>
+				<div key={key}> { bugs[key].bug } { bugs[key].desc } </div>
+			)}
+	</div>
 
 //export default withAuthorization()(AccountPage);
 export default AccountPage;

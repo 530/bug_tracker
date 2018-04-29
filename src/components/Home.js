@@ -17,7 +17,7 @@ class HomePage extends Component {
 		this.descBug = this.descBug.bind(this)
 		this.submitBug = this.submitBug.bind(this)
 		this.removeBug = this.removeBug.bind(this)
-        this.updateBug = this.updateBug.bind(this)
+    this.updateBug = this.updateBug.bind(this)
 		this.state = {
 			station: '',
 			bug: '',
@@ -105,7 +105,7 @@ class HomePage extends Component {
 			<br />
 			<Button bsSize="large" onClick={this.submitBug} type="submit"> Enter Bug </Button>
 			<Button bsSize="large" onClick={this.removeBug} type="submit"> Remove Bug </Button>
-            <Button bsSize="large" onClick={this.updateBug} type="submit"> Update Bug </Button>
+      <Button bsSize="large" onClick={this.updateBug} type="submit"> Update Bug </Button>
 			</div>
     );
   }
