@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { PageHeader } from 'react-bootstrap';
 import * as firebase from 'firebase';
 import { PasswordForgetForm } from './PasswordForget';
 import PasswordChangeForm from './PasswordChange';
@@ -10,59 +11,36 @@ class AccountPage extends Component {
     super(props,context);
     this.state = {
       authUser: null,
-			value: 'coconut',
-			bugs: null
+			bugs: null,
+			name: null
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 	
 	componentDidMount() {
 		firebase.database().ref('bugs/').on('value', (snapshot) => {
 				this.setState({ bugs: snapshot.val() })
 		})
+		firebase.auth().onAuthStateChanged( (user) => {
+			if(user) {
+				const user = firebase.auth().currentUser;
+				this.setState({name: user.displayName});
+			}																	 
+		})
 	}
 	
-
-  handleChange(event) {
-    this.setState({value: event.target.value});
-  }
-
-  handleSubmit(event) {
-    alert('Your favorite flavor is: ' + this.state.value);
-    event.preventDefault();
-  }
   render() {
-		const { bugs } = this.state;
+		const { bugs, name } = this.state;
     return (
       <div className="App">
-			
-			{ !!bugs && <BugList bugs={bugs} /> }
-			
-			<BugTable />
-			
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Pick your favorite La Croix flavor:
-          <select value={this.state.value} onChange={this.handleChange}>
-            <option value="grapefruit">Grapefruit</option>
-            <option value="lime">Lime</option>
-            <option value="coconut">Coconut</option>
-            <option value="mango">Mango</option>
-          </select>
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-			
-			
-			
+				
+				<PageHeader> Hello: {name} </PageHeader>
         <PasswordForgetForm />
         <PasswordChangeForm />
       </div>
     );
   }
-	
 }
+
 
 const BugTable = () =>
 	<table className="bugTable">
@@ -81,5 +59,7 @@ const BugList = ({ bugs }) =>
 			)}
 	</div>
 
-//export default withAuthorization()(AccountPage);
-export default AccountPage;
+const authCondition = (authUser) => !!authUser;
+//{ !!bugs && <BugList bugs={bugs} /> }
+export default withAuthorization(authCondition)(AccountPage);
+//export default AccountPage;

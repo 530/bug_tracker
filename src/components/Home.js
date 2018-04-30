@@ -18,10 +18,12 @@ class HomePage extends Component {
 		this.submitBug = this.submitBug.bind(this)
 		this.removeBug = this.removeBug.bind(this)
     this.updateBug = this.updateBug.bind(this)
+    this.handleChange = this.handleChange.bind(this)
 		this.state = {
 			station: '',
 			bug: '',
 			desc: '',
+			value: 'low',
 			bugs: []
 		}
 	}
@@ -61,6 +63,7 @@ class HomePage extends Component {
 			station: this.state.station,
 			bug: this.state.bug,
 			desc: this.state.desc,
+			priority: this.state.value
 		}
 		firebase.database().ref('bugs/'+nextBug.id).set(nextBug);
 	}
@@ -70,7 +73,7 @@ class HomePage extends Component {
 		firebase.database().ref('bugs/').child(idNum).remove();
 	}
   
-    updateBug(event) {
+  updateBug(event) {
         const idNum = this.state.station;
         const descUpdate = this.state.desc;
       
@@ -79,7 +82,11 @@ class HomePage extends Component {
         updates['/desc'] = descUpdate;
       
         firebase.database().ref('bugs/').child(idNum).update(updates);
-    }
+  }
+	
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
 	
   render() {
 		
@@ -92,16 +99,26 @@ class HomePage extends Component {
 				pagination={ true }
 				search={ true }>
 			  <TableHeaderColumn dataField='id' isKey={true} hidden={true}>Ref ID</TableHeaderColumn>
-              <TableHeaderColumn dataField='station' width="10" dataSort={true}>Station</TableHeaderColumn>
-              <TableHeaderColumn dataField='bug' width="25">Bug/Issue</TableHeaderColumn>
-		      <TableHeaderColumn dataField='desc' width="50">Description</TableHeaderColumn>
-            </BootstrapTable>
+        <TableHeaderColumn dataField='station' width="10" dataSort={true}>Station</TableHeaderColumn>
+        <TableHeaderColumn dataField='bug' width="25">Bug/Issue</TableHeaderColumn>
+		    <TableHeaderColumn dataField='desc' width="50">Description</TableHeaderColumn>
+				<TableHeaderColumn dataField='priority' width="50">Priority</TableHeaderColumn>
+      </BootstrapTable>
 			
 			<input onChange={this.stationBug} type="text" placeholder="Station #" />
 			<br />
 			<textarea onChange={this.issueBug} type="text" placeholder="Bug/Issue" />
 			<br />
 			<textarea onChange={this.descBug} type="text" placeholder="Bug Description" />
+			<br />
+        <label>
+          Priority:
+          <select value={this.state.value} onChange={this.handleChange}>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </label>
 			<br />
 			<Button bsSize="large" onClick={this.submitBug} type="submit"> Enter Bug </Button>
 			<Button bsSize="large" onClick={this.removeBug} type="submit"> Remove Bug </Button>
@@ -113,5 +130,5 @@ class HomePage extends Component {
 
 const authCondition = (authUser) => !!authUser;
 
-//export default withAuthorization(authCondition)(HomePage);
-export default HomePage;
+export default withAuthorization(authCondition)(HomePage);
+//export default HomePage;
