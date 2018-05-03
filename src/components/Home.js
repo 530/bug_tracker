@@ -19,11 +19,13 @@ class HomePage extends Component {
 		this.removeBug = this.removeBug.bind(this)
     this.updateBug = this.updateBug.bind(this)
     this.handleChange = this.handleChange.bind(this)
+		this.handleAssign = this.handleAssign.bind(this)
 		this.state = {
 			station: '',
 			bug: '',
 			desc: '',
 			value: 'low',
+			assign: 'admin',
 			bugs: []
 		}
 	}
@@ -40,21 +42,15 @@ class HomePage extends Component {
 	}
 	
 	stationBug(event) {
-		this.setState({
-			station: event.target.value
-		});
+		this.setState({station: event.target.value});
 	}
 	
 	issueBug(event) {
-		this.setState({
-			bug: event.target.value
-		});
+		this.setState({bug: event.target.value});
 	}
 
 	descBug(event) {
-		this.setState({
-			desc: event.target.value
-		});
+		this.setState({desc: event.target.value});
 	}
 	
 	submitBug(event) {
@@ -63,7 +59,8 @@ class HomePage extends Component {
 			station: this.state.station,
 			bug: this.state.bug,
 			desc: this.state.desc,
-			priority: this.state.value
+			priority: this.state.value,
+			assign: this.state.assign
 		}
 		firebase.database().ref('bugs/'+nextBug.id).set(nextBug);
 	}
@@ -88,6 +85,10 @@ class HomePage extends Component {
     this.setState({value: event.target.value});
   }
 	
+  handleAssign(event) {
+    this.setState({assign: event.target.value});
+  }
+	
   render() {
 		
     return (
@@ -103,6 +104,7 @@ class HomePage extends Component {
         <TableHeaderColumn dataField='bug' width="25">Bug/Issue</TableHeaderColumn>
 		    <TableHeaderColumn dataField='desc' width="50">Description</TableHeaderColumn>
 				<TableHeaderColumn dataField='priority' width="50">Priority</TableHeaderColumn>
+				<TableHeaderColumn dataField='assign' width="50">Assigned To</TableHeaderColumn>
       </BootstrapTable>
 			
 			<input onChange={this.stationBug} type="text" placeholder="Station #" />
@@ -111,14 +113,16 @@ class HomePage extends Component {
 			<br />
 			<textarea onChange={this.descBug} type="text" placeholder="Bug Description" />
 			<br />
-        <label>
-          Priority:
-          <select value={this.state.value} onChange={this.handleChange}>
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
-          </select>
-        </label>
+      	<select value={this.state.value} onChange={this.handleChange}>
+        	<option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+				</select>
+			<br />
+      	<select value={this.state.assign} onChange={this.handleAssign}>
+        	<option value="admin">Admin</option>
+          <option value="bob">Bob</option>
+				</select>
 			<br />
 			<Button bsSize="large" onClick={this.submitBug} type="submit"> Enter Bug </Button>
 			<Button bsSize="large" onClick={this.removeBug} type="submit"> Remove Bug </Button>
