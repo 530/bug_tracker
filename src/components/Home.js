@@ -90,7 +90,6 @@ class HomePage extends Component {
     this.setState({assign: event.target.value});
   }
 	
-
   render() {
 
     return (
