@@ -3,6 +3,7 @@ import { Button, PageHeader } from 'react-bootstrap';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import withAuthorization from './withAuthorization';
 import * as firebase from 'firebase';
+import './reactTable.css';
 
 const Header = () =>
 	<div>
@@ -21,6 +22,7 @@ class HomePage extends Component {
     this.handleChange = this.handleChange.bind(this)
 		this.handleAssign = this.handleAssign.bind(this)
 		this.state = {
+			length: '',
 			station: '',
 			bug: '',
 			desc: '',
@@ -73,7 +75,6 @@ class HomePage extends Component {
   updateBug(event) {
         const idNum = this.state.station;
         const descUpdate = this.state.desc;
-      
         var updates = {};
         updates['/id'] = idNum;
         updates['/desc'] = descUpdate;
@@ -89,8 +90,9 @@ class HomePage extends Component {
     this.setState({assign: event.target.value});
   }
 	
+
   render() {
-		
+
     return (
       <div className="App">
 			<Header />
@@ -98,7 +100,8 @@ class HomePage extends Component {
 				ref='table'
 				data={ this.state.bugs }
 				pagination={ true }
-				search={ true }>
+				search={ true }
+				hover={ true }>
 			  <TableHeaderColumn dataField='id' isKey={true} hidden={true}>Ref ID</TableHeaderColumn>
         <TableHeaderColumn dataField='station' width="10" dataSort={true}>Station</TableHeaderColumn>
         <TableHeaderColumn dataField='bug' width="25">Bug/Issue</TableHeaderColumn>

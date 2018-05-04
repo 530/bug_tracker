@@ -29,7 +29,7 @@ class AccountPage extends Component {
 	}
 	
   render() {
-		const { bugs, name } = this.state;
+		const { name } = this.state;
     return (
       <div className="App">
 				
@@ -41,23 +41,16 @@ class AccountPage extends Component {
   }
 }
 
-
-const BugTable = () =>
-	<table className="bugTable">
-		<tr>
-			<th> Station </th>
-			<th> Bug </th>
-			<th> Desc </th>
-			<th> Priority </th>
-		</tr>
-	</table>
-
-const BugList = ({ bugs }) =>
+// under render, use if using BugList
+/*
+const { bugs, name } = this.state;
+*/
+/*const BugList = ({ bugs }) =>
 	<div>
 			{Object.keys(bugs).map(key =>
 				<div key={key}> { bugs[key].bug } { bugs[key].desc } </div>
 			)}
-	</div>
+	</div>*/
 
 const authCondition = (authUser) => !!authUser;
 //{ !!bugs && <BugList bugs={bugs} /> }

@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
-import { PageHeader } from 'react-bootstrap';
 import './Landing.css';
 import icon from './Logo.png';
-
-const styledUp = {
-	borderBottom: 'none',
-	paddingBottom: '0px'
-};
 
 class LandingPage extends Component {
 	render() {
   	return (
 			<div className="App App-intro">
-				<img src={icon} />
+				<img alt='' src={icon} />
 				<Header/>
 				<Content/>
 			</div>
@@ -27,7 +21,7 @@ const Header = () =>
 
 const Content = () =>
 	<div className="element container">
-		<div classname="featurePad">
+		<div className="featurePad">
 			<h1><strong>Features</strong></h1>
 			<h4>Email Alerts</h4>
 			<h4>Easy to use GUI</h4>

@@ -4,7 +4,6 @@ import './App.css';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import SignOutButton from './SignOut';
 import * as routes from '../constants/routes';
-import withAuthorization from './withAuthorization';
 
 const Navigation = (props, context) =>
 	<div>
