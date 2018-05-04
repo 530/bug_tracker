@@ -1,15 +1,25 @@
 import React, { Component } from 'react';
 import './Landing.css';
+import Background from './bg1.jpg';
 import icon from './Logo.png';
+
+
+var backStyle = {
+	width: "100%",
+	height: "700px",
+	backgroundImage: `url(${Background})`
+};
 
 class LandingPage extends Component {
 	render() {
   	return (
+			<section style={ backStyle }>
 			<div className="App App-intro">
 				<img alt='' src={icon} />
 				<Header/>
 				<Content/>
 			</div>
+			</section>
 		);
 	}
 }
