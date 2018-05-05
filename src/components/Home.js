@@ -10,17 +10,19 @@ const Header = () =>
 		<PageHeader>Create a Bug/Issue</PageHeader>
 	</div>
 
+const db = firebase.database().ref('bugs/');
+
 class HomePage extends Component {
 	constructor(props,context) {
 		super(props,context);
-		this.stationBug = this.stationBug.bind(this)
-		this.issueBug = this.issueBug.bind(this)
-		this.descBug = this.descBug.bind(this)
-		this.submitBug = this.submitBug.bind(this)
-		this.removeBug = this.removeBug.bind(this)
-    this.updateBug = this.updateBug.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-		this.handleAssign = this.handleAssign.bind(this)
+		this.stationBug = this.stationBug.bind(this);
+		this.issueBug = this.issueBug.bind(this);
+		this.descBug = this.descBug.bind(this);
+		this.submitBug = this.submitBug.bind(this);
+		this.removeBug = this.removeBug.bind(this);
+    this.updateBug = this.updateBug.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+		this.handleAssign = this.handleAssign.bind(this);
 		this.state = {
 			length: '',
 			station: '',
@@ -33,7 +35,7 @@ class HomePage extends Component {
 	}
 	
 	componentDidMount() {
-		firebase.database().ref('bugs/').on ('value', (snapshot) => {
+		db.on ('value', (snapshot) => {
 			const currentBugs = snapshot.val()
 			if (currentBugs != null) {
 				this.setState({
@@ -69,17 +71,20 @@ class HomePage extends Component {
 	
 	removeBug(event) {
 		const idNum = this.state.station;
-		firebase.database().ref('bugs/').child(idNum).remove();
+		db.child(idNum).remove();
+		/*
+		for (let i = 0; i < this.state.bugs.length; i++) {
+			
+			db.update(i);
+		};*/
 	}
   
   updateBug(event) {
         const idNum = this.state.station;
         const descUpdate = this.state.desc;
         var updates = {};
-        updates['/id'] = idNum;
         updates['/desc'] = descUpdate;
-      
-        firebase.database().ref('bugs/').child(idNum).update(updates);
+        db.child(idNum).update(updates);
   }
 	
   handleChange(event) {
@@ -91,7 +96,7 @@ class HomePage extends Component {
   }
 	
   render() {
-
+		
     return (
       <div className="App">
 			<Header />
@@ -101,7 +106,7 @@ class HomePage extends Component {
 				pagination={ true }
 				search={ true }
 				hover={ true }>
-			  <TableHeaderColumn dataField='id' isKey={true} hidden={true}>Ref ID</TableHeaderColumn>
+			  <TableHeaderColumn dataField='id' isKey={true} width="10">Ref ID</TableHeaderColumn>
         <TableHeaderColumn dataField='station' width="10" dataSort={true}>Station</TableHeaderColumn>
         <TableHeaderColumn dataField='bug' width="25">Bug/Issue</TableHeaderColumn>
 		    <TableHeaderColumn dataField='desc' width="50">Description</TableHeaderColumn>
