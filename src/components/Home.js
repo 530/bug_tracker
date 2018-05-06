@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Button, PageHeader } from 'react-bootstrap';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+//import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import cellEditFactory from 'react-bootstrap-table2-editor';
+import BootstrapTable from 'react-bootstrap-table-next';
 import withAuthorization from './withAuthorization';
 import * as firebase from 'firebase';
 import './reactTable.css';
@@ -23,14 +26,38 @@ class HomePage extends Component {
     this.updateBug = this.updateBug.bind(this);
     this.handleChange = this.handleChange.bind(this);
 		this.handleAssign = this.handleAssign.bind(this);
+		this.onAfterSaveCell = this.onAfterSaveCell.bind(this);
 		this.state = {
-			length: '',
 			station: '',
 			bug: '',
 			desc: '',
 			value: 'low',
 			assign: 'admin',
-			bugs: []
+			bugs: [],
+			columns: [
+		{
+			dataField: 'id',
+			text: 'ID',
+			editable: false},
+		{
+			dataField: 'station',
+			text: 'Station'},
+		{
+			dataField: 'bug',
+			text: 'Bugs'
+		},
+		{
+			dataField: 'desc',
+			text: 'Description'
+		},
+		{
+			dataField: 'priority',
+			text: 'Priority'
+		},
+		{
+			dataField: 'assign',
+			text: 'Assigned to'
+		}]
 		}
 	}
 	
@@ -42,7 +69,7 @@ class HomePage extends Component {
 					bugs: currentBugs
 				})
 			}
-		})
+		});
 	}
 	
 	stationBug(event) {
@@ -72,11 +99,7 @@ class HomePage extends Component {
 	removeBug(event) {
 		const idNum = this.state.station;
 		db.child(idNum).remove();
-		/*
-		for (let i = 0; i < this.state.bugs.length; i++) {
-			
-			db.update(i);
-		};*/
+		
 	}
   
   updateBug(event) {
@@ -95,24 +118,22 @@ class HomePage extends Component {
     this.setState({assign: event.target.value});
   }
 	
+	onAfterSaveCell() {
+			
+	}
+	
   render() {
-		
+		const cellEdit = cellEditFactory ({
+			mode: 'click',
+			afterSaveCell: this.onAfterSaveCell
+		});
     return (
       <div className="App">
 			<Header />
-			<BootstrapTable
-				ref='table'
-				data={ this.state.bugs }
-				pagination={ true }
-				search={ true }
-				hover={ true }>
-			  <TableHeaderColumn dataField='id' isKey={true} width="10">Ref ID</TableHeaderColumn>
-        <TableHeaderColumn dataField='station' width="10" dataSort={true}>Station</TableHeaderColumn>
-        <TableHeaderColumn dataField='bug' width="25">Bug/Issue</TableHeaderColumn>
-		    <TableHeaderColumn dataField='desc' width="50">Description</TableHeaderColumn>
-				<TableHeaderColumn dataField='priority' width="50">Priority</TableHeaderColumn>
-				<TableHeaderColumn dataField='assign' width="50">Assigned To</TableHeaderColumn>
-      </BootstrapTable>
+
+			
+			<BootstrapTable keyField='id' data={ this.state.bugs }  columns={ this.state.columns } 
+			pagination={ paginationFactory() } cellEdit={ cellEdit } />
 			
 			<input onChange={this.stationBug} type="text" placeholder="Station #" />
 			<br />
@@ -143,3 +164,20 @@ const authCondition = (authUser) => !!authUser;
 
 export default withAuthorization(authCondition)(HomePage);
 //export default HomePage;
+
+
+/*
+			<BootstrapTable
+				ref='table'
+				data={ this.state.bugs }
+				pagination={ true }
+				search={ true }
+				hover={ true }>
+			  <TableHeaderColumn dataField='id'  width="10">Ref ID</TableHeaderColumn>
+        <TableHeaderColumn dataField='station' isKey={true} width="10" dataSort={true}>Station</TableHeaderColumn>
+        <TableHeaderColumn dataField='bug' width="25">Bug/Issue</TableHeaderColumn>
+		    <TableHeaderColumn dataField='desc' width="50">Description</TableHeaderColumn>
+				<TableHeaderColumn dataField='priority' width="50">Priority</TableHeaderColumn>
+				<TableHeaderColumn dataField='assign' width="50">Assigned To</TableHeaderColumn>
+      </BootstrapTable>
+			*/
