@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Button, PageHeader } from 'react-bootstrap';
-//import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import { Button, PageHeader, Modal } from 'react-bootstrap';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -12,6 +11,8 @@ const Header = () =>
 	<div>
 		<PageHeader>Create a Bug/Issue</PageHeader>
 	</div>
+
+
 
 const db = firebase.database().ref('bugs/');
 
@@ -27,7 +28,9 @@ class HomePage extends Component {
     this.handleChange = this.handleChange.bind(this);
 		this.handleAssign = this.handleAssign.bind(this);
 		this.onAfterSaveCell = this.onAfterSaveCell.bind(this);
+		this.toggle = this.toggle.bind(this);
 		this.state = {
+			modal: false,
 			station: '',
 			bug: '',
 			desc: '',
@@ -38,6 +41,7 @@ class HomePage extends Component {
 		{
 			dataField: 'id',
 			text: 'ID',
+			hidden: true,
 			editable: false},
 		{
 			dataField: 'station',
@@ -72,6 +76,14 @@ class HomePage extends Component {
 		});
 	}
 	
+	
+	toggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+	
+	
 	stationBug(event) {
 		this.setState({station: event.target.value});
 	}
@@ -94,6 +106,7 @@ class HomePage extends Component {
 			assign: this.state.assign
 		}
 		firebase.database().ref('bugs/'+nextBug.id).set(nextBug);
+		this.toggle();
 	}
 	
 	removeBug(event) {
@@ -101,13 +114,13 @@ class HomePage extends Component {
 		db.child(idNum).remove();
 		
 	}
-  
-  updateBug(event) {
-        const idNum = this.state.station;
-        const descUpdate = this.state.desc;
-        var updates = {};
-        updates['/desc'] = descUpdate;
-        db.child(idNum).update(updates);
+	
+  updateBug() {
+    const idNum = this.state.station;
+    const descUpdate = this.state.desc;
+    var updates = {};
+    updates['/desc'] = descUpdate;
+    db.child(idNum).update(updates);
   }
 	
   handleChange(event) {
@@ -118,8 +131,16 @@ class HomePage extends Component {
     this.setState({assign: event.target.value});
   }
 	
-	onAfterSaveCell() {
-			
+	onAfterSaveCell(oldValue, newValue, row) {
+		const rowId = row.id;
+		const rowStation = row.station;
+		const rowBug = row.bug;
+		const rowDesc = row.desc;
+		var rowUpdate = {};
+		rowUpdate['/station'] = rowStation;
+		rowUpdate['/bug'] = rowBug;
+		rowUpdate['/desc'] = rowDesc;
+		db.child(rowId).update(rowUpdate);
 	}
 	
   render() {
@@ -127,14 +148,19 @@ class HomePage extends Component {
 			mode: 'click',
 			afterSaveCell: this.onAfterSaveCell
 		});
+
     return (
       <div className="App">
 			<Header />
 
-			
 			<BootstrapTable keyField='id' data={ this.state.bugs }  columns={ this.state.columns } 
-			pagination={ paginationFactory() } cellEdit={ cellEdit } />
+			pagination={ paginationFactory() } cellEdit={ cellEdit } insertRow={true} />
 			
+			
+     	<Button bsSize="large" bsStyle="primary" onClick={this.toggle}>Add Bug</Button>
+     	<Modal show={this.state.modal} onHide={this.toggle} >
+     
+     	<Modal.Body className="App">
 			<input onChange={this.stationBug} type="text" placeholder="Station #" />
 			<br />
 			<textarea onChange={this.issueBug} type="text" placeholder="Bug/Issue" />
@@ -151,10 +177,15 @@ class HomePage extends Component {
         	<option value="admin">Admin</option>
           <option value="bob">Bob</option>
 				</select>
-			<br />
-			<Button bsSize="large" onClick={this.submitBug} type="submit"> Enter Bug </Button>
-			<Button bsSize="large" onClick={this.removeBug} type="submit"> Remove Bug </Button>
-      <Button bsSize="large" onClick={this.updateBug} type="submit"> Update Bug </Button>
+     	</Modal.Body>
+
+     	<Modal.Footer>
+        <Button bsStyle="success" onClick={this.submitBug}>Submit Bug</Button>{' '}
+				<Button onClick={this.removeBug} type="submit"> Remove Bug </Button>
+        <Button bsStyle="danger" onClick={this.toggle}>Cancel</Button>
+      </Modal.Footer>
+			</Modal>
+			
 			</div>
     );
   }
@@ -163,21 +194,3 @@ class HomePage extends Component {
 const authCondition = (authUser) => !!authUser;
 
 export default withAuthorization(authCondition)(HomePage);
-//export default HomePage;
-
-
-/*
-			<BootstrapTable
-				ref='table'
-				data={ this.state.bugs }
-				pagination={ true }
-				search={ true }
-				hover={ true }>
-			  <TableHeaderColumn dataField='id'  width="10">Ref ID</TableHeaderColumn>
-        <TableHeaderColumn dataField='station' isKey={true} width="10" dataSort={true}>Station</TableHeaderColumn>
-        <TableHeaderColumn dataField='bug' width="25">Bug/Issue</TableHeaderColumn>
-		    <TableHeaderColumn dataField='desc' width="50">Description</TableHeaderColumn>
-				<TableHeaderColumn dataField='priority' width="50">Priority</TableHeaderColumn>
-				<TableHeaderColumn dataField='assign' width="50">Assigned To</TableHeaderColumn>
-      </BootstrapTable>
-			*/
