@@ -8,7 +8,7 @@ import * as firebase from 'firebase';
 import './reactTable.css';
 
 const Header = () =>
-	<div>
+	<div className="App">
 		<PageHeader>Create a Bug/Issue</PageHeader>
 	</div>
 
@@ -28,6 +28,7 @@ class HomePage extends Component {
     this.handleChange = this.handleChange.bind(this);
 		this.handleAssign = this.handleAssign.bind(this);
 		this.onAfterSaveCell = this.onAfterSaveCell.bind(this);
+		this.handleSelect = this.handleSelect.bind(this);
 		this.toggle = this.toggle.bind(this);
 		this.state = {
 			modal: false,
@@ -82,7 +83,6 @@ class HomePage extends Component {
       modal: !this.state.modal
     });
   }
-	
 	
 	stationBug(event) {
 		this.setState({station: event.target.value});
@@ -143,23 +143,36 @@ class HomePage extends Component {
 		db.child(rowId).update(rowUpdate);
 	}
 	
+	handleSelect(row, isSelect) {
+		if(isSelect) {
+			if(window.confirm("Are you sure you want to delete this Bug?")) {
+				const rowId = row.id;
+				db.child(rowId).remove();
+			}
+		}
+	}
+	
   render() {
 		const cellEdit = cellEditFactory ({
 			mode: 'click',
 			afterSaveCell: this.onAfterSaveCell
 		});
+		const selectRow ={ 
+			mode: 'radio',
+			onSelect: this.handleSelect
+		};
 
     return (
       <div className="App">
 			<Header />
 
 			<BootstrapTable keyField='id' data={ this.state.bugs }  columns={ this.state.columns } 
-			pagination={ paginationFactory() } cellEdit={ cellEdit } insertRow={true} />
+			pagination={ paginationFactory() } cellEdit={ cellEdit } insertRow={true} selectRow= { selectRow }/>
 			
 			
      	<Button bsSize="large" bsStyle="primary" onClick={this.toggle}>Add Bug</Button>
+
      	<Modal show={this.state.modal} onHide={this.toggle} >
-     
      	<Modal.Body className="App">
 			<input onChange={this.stationBug} type="text" placeholder="Station #" />
 			<br />
@@ -178,14 +191,13 @@ class HomePage extends Component {
           <option value="bob">Bob</option>
 				</select>
      	</Modal.Body>
-
      	<Modal.Footer>
         <Button bsStyle="success" onClick={this.submitBug}>Submit Bug</Button>{' '}
 				<Button onClick={this.removeBug} type="submit"> Remove Bug </Button>
         <Button bsStyle="danger" onClick={this.toggle}>Cancel</Button>
       </Modal.Footer>
-			</Modal>
-			
+			</Modal>			
+
 			</div>
     );
   }
