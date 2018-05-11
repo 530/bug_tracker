@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, PageHeader, Modal } from 'react-bootstrap';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -32,11 +33,13 @@ class HomePage extends Component {
 		this.toggle = this.toggle.bind(this);
 		this.state = {
 			modal: false,
+            name: null,
 			station: '',
 			bug: '',
 			desc: '',
 			value: 'low',
 			assign: 'admin',
+            timestamp: '',
 			bugs: [],
 			columns: [
 		{
@@ -46,7 +49,9 @@ class HomePage extends Component {
 			editable: false},
 		{
 			dataField: 'station',
-			text: 'Station'},
+			text: 'Station',
+            sort: true,
+            filter:  textFilter()},
 		{
 			dataField: 'bug',
 			text: 'Bugs'
@@ -62,7 +67,15 @@ class HomePage extends Component {
 		{
 			dataField: 'assign',
 			text: 'Assigned to'
-		}]
+        },
+        {
+            dataField: 'name',
+            text: 'Submitted By'
+        },
+        {
+            dataField: 'timestamp',
+            text: 'Date Submitted'
+        }]
 		}
 	}
 	
@@ -72,9 +85,14 @@ class HomePage extends Component {
 			if (currentBugs != null) {
 				this.setState({
 					bugs: currentBugs
-				})
-			}
+				})}
 		});
+		firebase.auth().onAuthStateChanged( (user) => {
+			if(user) {
+				const user = firebase.auth().currentUser;
+				this.setState({name: user.displayName});
+			}																	 
+		})
 	}
 	
 	
@@ -103,7 +121,9 @@ class HomePage extends Component {
 			bug: this.state.bug,
 			desc: this.state.desc,
 			priority: this.state.value,
-			assign: this.state.assign
+			assign: this.state.assign,
+            timestamp: Date(0),
+            name: this.state.name
 		}
 		firebase.database().ref('bugs/'+nextBug.id).set(nextBug);
 		this.toggle();
@@ -167,7 +187,8 @@ class HomePage extends Component {
 			<Header />
 
 			<BootstrapTable keyField='id' data={ this.state.bugs }  columns={ this.state.columns } 
-			pagination={ paginationFactory() } cellEdit={ cellEdit } insertRow={true} selectRow= { selectRow }/>
+			pagination={paginationFactory()} cellEdit={cellEdit} insertRow={true} 
+            filter={filterFactory()}/>
 			
 			
      	<Button bsSize="large" bsStyle="primary" onClick={this.toggle}>Add Bug</Button>

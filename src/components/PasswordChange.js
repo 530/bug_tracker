@@ -66,7 +66,7 @@ class PasswordChangeForm extends Component {
         	/>
 				</FormGroup>
         <Button bsSize="large" disabled={isInvalid} type="submit">
-          Reset My Password
+          Confirm New Password
         </Button>
 
         { error && <p>{error.message}</p> }
