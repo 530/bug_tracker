@@ -187,8 +187,8 @@ class HomePage extends Component {
 			<Header />
 
 			<BootstrapTable keyField='id' data={ this.state.bugs }  columns={ this.state.columns } 
-			pagination={paginationFactory()} cellEdit={cellEdit} insertRow={true} 
-            filter={filterFactory()}/>
+			pagination={paginationFactory()} cellEdit={cellEdit} insertRow={true} selectRow={ selectRow }
+      filter={filterFactory()}/>
 			
 			
      	<Button bsSize="large" bsStyle="primary" onClick={this.toggle}>Add Bug</Button>
