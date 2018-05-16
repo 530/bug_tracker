@@ -25,10 +25,9 @@ const Content = () =>
 			<h1><strong>Features</strong></h1>
 			<h4>Easy to use GUI</h4>
 			<h4>Add, Remove, Update Bugs</h4>
-            <h4>Assign Bugs to users with corresponding priority</h4>
-            <h4>Firebase user authentication for privileged views</h4>
+      <h4>Assign Bugs to users with corresponding priority</h4>
+      <h4>Firebase user authentication for privileged views</h4>
 			<h4>Assigning Bugs and Issues fast and efficiently</h4>
-
 		</div>
 	</div>
 

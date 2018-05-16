@@ -13,7 +13,9 @@ const Header = () =>
 		<PageHeader>Create a Bug/Issue</PageHeader>
 	</div>
 
-
+var styled = {
+	textAlign: 'center'
+};
 
 const db = firebase.database().ref('bugs/');
 
@@ -25,7 +27,6 @@ class HomePage extends Component {
 		this.descBug = this.descBug.bind(this);
 		this.submitBug = this.submitBug.bind(this);
 		this.removeBug = this.removeBug.bind(this);
-    this.updateBug = this.updateBug.bind(this);
     this.handleChange = this.handleChange.bind(this);
 		this.handleAssign = this.handleAssign.bind(this);
 		this.onAfterSaveCell = this.onAfterSaveCell.bind(this);
@@ -33,13 +34,14 @@ class HomePage extends Component {
 		this.toggle = this.toggle.bind(this);
 		this.state = {
 			modal: false,
-            name: null,
+      name: null,
 			station: '',
 			bug: '',
 			desc: '',
 			value: 'low',
 			assign: 'admin',
-            timestamp: '',
+      timestampS: '',
+			timestampU: '',
 			bugs: [],
 			columns: [
 		{
@@ -50,8 +52,9 @@ class HomePage extends Component {
 		{
 			dataField: 'station',
 			text: 'Station',
-            sort: true,
-            filter:  textFilter()},
+      sort: true,
+      filter:  textFilter()
+		},
 		{
 			dataField: 'bug',
 			text: 'Bugs'
@@ -67,15 +70,21 @@ class HomePage extends Component {
 		{
 			dataField: 'assign',
 			text: 'Assigned to'
-        },
-        {
-            dataField: 'name',
-            text: 'Submitted By'
-        },
-        {
-            dataField: 'timestamp',
-            text: 'Date Submitted'
-        }]
+    },
+    {
+      dataField: 'name',
+      text: 'Submitted By',
+			editable: false
+    },
+    {
+      dataField: 'timestampS',
+      text: 'Date Submitted',
+			editable: false
+    },
+		{
+			dataField: 'timestampU',
+			text: 'Date Last Updated'
+		}]
 		}
 	}
 	
@@ -122,8 +131,9 @@ class HomePage extends Component {
 			desc: this.state.desc,
 			priority: this.state.value,
 			assign: this.state.assign,
-            timestamp: Date(0),
-            name: this.state.name
+			timestampS: Date(0),
+      timestampU: Date(0),
+      name: this.state.name
 		}
 		firebase.database().ref('bugs/'+nextBug.id).set(nextBug);
 		this.toggle();
@@ -134,14 +144,6 @@ class HomePage extends Component {
 		db.child(idNum).remove();
 		
 	}
-	
-  updateBug() {
-    const idNum = this.state.station;
-    const descUpdate = this.state.desc;
-    var updates = {};
-    updates['/desc'] = descUpdate;
-    db.child(idNum).update(updates);
-  }
 	
   handleChange(event) {
     this.setState({value: event.target.value});
@@ -156,10 +158,14 @@ class HomePage extends Component {
 		const rowStation = row.station;
 		const rowBug = row.bug;
 		const rowDesc = row.desc;
+		const rowPri = row.priority;
+		const rowTimeUpdate = Date(0);
 		var rowUpdate = {};
 		rowUpdate['/station'] = rowStation;
 		rowUpdate['/bug'] = rowBug;
 		rowUpdate['/desc'] = rowDesc;
+		rowUpdate['/priority'] = rowPri;
+		rowUpdate['/timestampU'] = rowTimeUpdate;
 		db.child(rowId).update(rowUpdate);
 	}
 	
@@ -183,15 +189,16 @@ class HomePage extends Component {
 		};
 
     return (
-      <div className="App">
+      <div >
 			<Header />
 
 			<BootstrapTable keyField='id' data={ this.state.bugs }  columns={ this.state.columns } 
 			pagination={paginationFactory()} cellEdit={cellEdit} insertRow={true} selectRow={ selectRow }
       filter={filterFactory()}/>
 			
-			
+			<div style={styled}>
      	<Button bsSize="large" bsStyle="primary" onClick={this.toggle}>Add Bug</Button>
+			</div>
 
      	<Modal show={this.state.modal} onHide={this.toggle} >
      	<Modal.Body className="App">
@@ -214,7 +221,6 @@ class HomePage extends Component {
      	</Modal.Body>
      	<Modal.Footer>
         <Button bsStyle="success" onClick={this.submitBug}>Submit Bug</Button>{' '}
-				<Button onClick={this.removeBug} type="submit"> Remove Bug </Button>
         <Button bsStyle="danger" onClick={this.toggle}>Cancel</Button>
       </Modal.Footer>
 			</Modal>			

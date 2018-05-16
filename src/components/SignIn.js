@@ -37,7 +37,6 @@ class SignInForm extends Component {
       email,
       password,
     } = this.state;
-
     const {
       history,
     } = this.props;
@@ -100,5 +99,5 @@ class SignInForm extends Component {
 export default withRouter(SignInPage);
 
 export {
-  SignInForm,
+  SignInForm
 };
