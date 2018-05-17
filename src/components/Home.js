@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, PageHeader, Modal } from 'react-bootstrap';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import cellEditFactory from 'react-bootstrap-table2-editor';
+import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import BootstrapTable from 'react-bootstrap-table-next';
 import withAuthorization from './withAuthorization';
 import * as firebase from 'firebase';
@@ -65,11 +65,32 @@ class HomePage extends Component {
 		},
 		{
 			dataField: 'priority',
-			text: 'Priority'
+			text: 'Priority',
+            editor: {
+              type: Type.SELECT,
+              options: [{
+              value: 'high',
+              label: 'high'
+              }, {
+              value: 'medium',
+              label: 'medium'
+              }, {
+              value: 'low',
+              label: 'low'
+              }]}
 		},
 		{
 			dataField: 'assign',
-			text: 'Assigned to'
+			text: 'Assigned to',
+            editor: {
+              type: Type.SELECT,
+              options: [{
+              value: 'admin',
+              label: 'admin'
+              }, {
+              value: 'bob',
+              label: 'bob'
+              }]}
     },
     {
       dataField: 'name',

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { PageHeader, Modal, Button} from 'react-bootstrap';
 import * as firebase from 'firebase';
-import { PasswordForgetForm } from './PasswordForget';
+//import { PasswordForgetForm } from './PasswordForget';
 import PasswordChangeForm from './PasswordChange';
 import withAuthorization from './withAuthorization';
 
