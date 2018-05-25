@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Alert from 'react-s-alert';
 import { Button, PageHeader, Modal } from 'react-bootstrap';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -7,6 +8,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import withAuthorization from './withAuthorization';
 import * as firebase from 'firebase';
 import './reactTable.css';
+import './alert.css';
 
 const Header = () =>
 	<div className="App">
@@ -97,6 +99,22 @@ class HomePage extends Component {
       text: 'Submitted By',
 			editable: false
     },
+		{
+			dataField: 'status',
+			text: 'Status',
+            editor: {
+              type: Type.SELECT,
+              options: [{
+              value: 'complete',
+              label: 'complete'
+              }, {
+              value: 'in progress',
+              label: 'in progress'
+              }, {
+              value: 'checked in',
+              label: 'checked in'
+              }]}
+		},
     {
       dataField: 'timestampS',
       text: 'Date Submitted',
@@ -104,7 +122,8 @@ class HomePage extends Component {
     },
 		{
 			dataField: 'timestampU',
-			text: 'Date Last Updated'
+			text: 'Date Last Updated',
+			editable: false
 		}]
 		}
 	}
@@ -154,7 +173,8 @@ class HomePage extends Component {
 			assign: this.state.assign,
 			timestampS: Date(0),
       timestampU: Date(0),
-      name: this.state.name
+      name: this.state.name,
+			status: 'new'
 		}
 		firebase.database().ref('bugs/'+nextBug.id).set(nextBug);
 		this.toggle();
@@ -180,12 +200,14 @@ class HomePage extends Component {
 		const rowBug = row.bug;
 		const rowDesc = row.desc;
 		const rowPri = row.priority;
+		const rowStatus = row.status;
 		const rowTimeUpdate = Date(0);
 		var rowUpdate = {};
 		rowUpdate['/station'] = rowStation;
 		rowUpdate['/bug'] = rowBug;
 		rowUpdate['/desc'] = rowDesc;
 		rowUpdate['/priority'] = rowPri;
+		rowUpdate['/status'] = rowStatus;
 		rowUpdate['/timestampU'] = rowTimeUpdate;
 		db.child(rowId).update(rowUpdate);
 	}
@@ -198,6 +220,22 @@ class HomePage extends Component {
 			}
 		}
 	}
+	
+	handleInfo(e) {
+    e.preventDefault();
+    Alert.info('The below button is the remove feature, Click to remove a bug.', {
+      position: 'top-left',
+			effect: 'genie'
+    });
+    Alert.info('The above button is the add feature, Click me to add a bug', {
+      position: 'bottom',
+			effect: 'genie'
+    });
+    Alert.info('To edit a field, just click one! (Field Submitted by and Dates are not editable)', {
+      position: 'bottom-right',
+			effect: 'genie'
+    });
+  }
 	
   render() {
 		const cellEdit = cellEditFactory ({
@@ -220,6 +258,12 @@ class HomePage extends Component {
 			<div style={styled}>
      	<Button bsSize="large" bsStyle="primary" onClick={this.toggle}>Add Bug</Button>
 			</div>
+
+			<br />
+			<div className="cf" style={styled}>
+				<Button bsStyle="info" className="button buttonInfo" onClick={this.handleInfo}>Need Help?</Button>
+				<Alert stack={true} timeout={20000} />
+			</div>	
 
      	<Modal show={this.state.modal} onHide={this.toggle} >
      	<Modal.Body className="App">
